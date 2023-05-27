@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSVReader.WebApi", "CSVReader.WebApi\CSVReader.WebApi.csproj", "{7443B1FB-132F-470A-8F10-353E9D41FD81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSVReader.Infrastructure", "CSVReader.Infrastructure\CSVReader.Infrastructure.csproj", "{529E8E7A-E81E-4528-97AD-8FCDE3A525C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSVReader.Domain", "CSVReader.Domain\CSVReader.Domain.csproj", "{1682BDA8-C153-454E-95AF-CFFB41CA5D2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSVReader.Application", "CSVReader.Application\CSVReader.Application.csproj", "{D535951E-3061-4ACC-B52E-66B8475BF8E9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7443B1FB-132F-470A-8F10-353E9D41FD81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7443B1FB-132F-470A-8F10-353E9D41FD81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7443B1FB-132F-470A-8F10-353E9D41FD81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7443B1FB-132F-470A-8F10-353E9D41FD81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{529E8E7A-E81E-4528-97AD-8FCDE3A525C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{529E8E7A-E81E-4528-97AD-8FCDE3A525C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{529E8E7A-E81E-4528-97AD-8FCDE3A525C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{529E8E7A-E81E-4528-97AD-8FCDE3A525C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1682BDA8-C153-454E-95AF-CFFB41CA5D2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1682BDA8-C153-454E-95AF-CFFB41CA5D2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1682BDA8-C153-454E-95AF-CFFB41CA5D2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1682BDA8-C153-454E-95AF-CFFB41CA5D2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D535951E-3061-4ACC-B52E-66B8475BF8E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D535951E-3061-4ACC-B52E-66B8475BF8E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D535951E-3061-4ACC-B52E-66B8475BF8E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D535951E-3061-4ACC-B52E-66B8475BF8E9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
