@@ -22,4 +22,12 @@ public class CsvFilesController : ControllerBase
         
         return Created(string.Empty, result);
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetByIdAsync(string id)
+    {
+        var result = await _csvFileService.GetByIdAsync(id);
+
+        return Ok(result);
+    }
 }

@@ -15,7 +15,7 @@ public class RecordsController : ControllerBase
         _recordsService = recordsService;
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("api/v1/files/{id}")]
     public async Task<IActionResult> GetByFileIdAsync(string fileId)
     {
         var records = await _recordsService.GetByFileIdAsync(fileId);
@@ -23,6 +23,16 @@ public class RecordsController : ControllerBase
         return Ok(records);
     }
 
+    [HttpGet("{fileId}")]
+    public async Task<IActionResult> GetRecords(string fileId)
+    {
+        var result = await _recordsService.GetByFileIdAsync(fileId);
+
+        return Ok(result);
+    }
+    
+    [HttpGet("")]
+    
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] CreateRecordVM model)
     {

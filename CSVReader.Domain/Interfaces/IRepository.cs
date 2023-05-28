@@ -6,7 +6,7 @@ namespace CSVReader.Domain.Interfaces;
 
 public interface IRepository<TEntity> where TEntity : BaseEntity
 {
-    Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> expression);
+    Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> expression, params string[] includes);
     
     Task CreateAsync(TEntity entity);
     

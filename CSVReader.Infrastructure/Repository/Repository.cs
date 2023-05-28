@@ -17,9 +17,19 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEnti
         DbSet = databaseContext.Set<TEntity>();
     }
 
-    public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> expression)
+    public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> expression, params string[] includes)
     {
-        return await DbSet.AsNoTracking().FirstOrDefaultAsync(expression);
+        IQueryable<TEntity> query = DbSet;
+
+        if (includes.Any())
+        {
+            foreach (var property in includes)
+            {
+                query = query.Include(property);
+            }
+        }
+        
+        return await query.AsNoTracking().FirstOrDefaultAsync(expression);
     }
 
     public async Task CreateAsync(TEntity entity)

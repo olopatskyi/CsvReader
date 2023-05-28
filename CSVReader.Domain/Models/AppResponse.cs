@@ -4,22 +4,25 @@ namespace CSVReader.Domain.Models;
 
 public class AppResponse
 {
+    public AppResponse()
+    {
+        
+    }
+    
+    public AppResponse(HttpStatusCode statusCode, IEnumerable<AppError>? errors)
+    {
+        StatusCode = (int)statusCode;
+        Errors = errors;
+    }
+    
     public int StatusCode { get; set; }
     
     public IEnumerable<AppError>? Errors { get; set; }
-
-    public static AppResponse WithStatusCode(HttpStatusCode statusCode)
-    {
-        return new AppResponse()
-        {
-            StatusCode = (int)statusCode,
-        };
-    }
 }
 
 public class AppResponse<TData> : AppResponse
 {
-    public AppResponse(int statusCode, IEnumerable<AppError>? errors, TData data)
+    public AppResponse(HttpStatusCode statusCode, IEnumerable<AppError>? errors, TData data) : base(statusCode, errors)
     {
         Data = data;
     }

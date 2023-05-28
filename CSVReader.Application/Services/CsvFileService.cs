@@ -1,9 +1,11 @@
 using System.Globalization;
+using System.Net;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CSVReader.Application.Interfaces;
 using CSVReader.Application.Models;
 using CSVReader.Domain.Entities;
+using CSVReader.Domain.Exceptions;
 using CSVReader.Domain.Interfaces;
 using CSVReader.Domain.Models;
 using ValidationException = CSVReader.Domain.Exceptions.ValidationException;
@@ -33,12 +35,21 @@ public class CsvFileService : ICsvFileService
         await _repository.CreateAsync(file);
         await _repository.SaveAsync();
 
-        return new AppResponse()
-        {
-            StatusCode = 200
-        };
+        return new AppResponse(HttpStatusCode.OK, null);
     }
-    
+
+    public async Task<AppResponse<CsvFile>> GetByIdAsync(string id)
+    {
+        var result = await _repository.FirstOrDefaultAsync(x => x.Id == Guid.Parse(id), $"{nameof(CsvFile.RowRecords)}");
+
+        if (result == null)
+        {
+            throw NotFoundException.Default<CsvFile>();
+        }
+
+        return new AppResponse<CsvFile>(HttpStatusCode.OK, null, result);
+    }
+
     private List<RowRecord> ReadCsvFile(CreateFileVM model)
     {
         var records = new List<RowRecord>();

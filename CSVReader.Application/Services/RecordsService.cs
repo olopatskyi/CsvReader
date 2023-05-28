@@ -24,7 +24,7 @@ public class RecordsService : IRecordsService
     {
         var records = await _repository.GetAsync(x => x.CsvFileId == Guid.Parse(fileId));
 
-        return new AppResponse<IEnumerable<RowRecord>>(200, null, records);
+        return new AppResponse<IEnumerable<RowRecord>>(HttpStatusCode.OK, null, records);
     }
 
     public async Task<AppResponse<RowRecordVM>> GetByIdAsync(string id)
@@ -32,7 +32,7 @@ public class RecordsService : IRecordsService
         var record = await GetRecordAsync(Guid.Parse(id));
 
         var data = _mapper.Map<RowRecordVM>(record);
-        return new AppResponse<RowRecordVM>(200, null, data);
+        return new AppResponse<RowRecordVM>(HttpStatusCode.OK, null, data);
     }
 
     public async Task<AppResponse> CreateAsync(CreateRecordVM model)
@@ -42,7 +42,7 @@ public class RecordsService : IRecordsService
         await _repository.CreateAsync(record);
         await _repository.SaveAsync();
         
-        return AppResponse.WithStatusCode(HttpStatusCode.Created);
+        return new AppResponse(HttpStatusCode.Created, null);
     }
 
     public async Task<AppResponse<RowRecordVM>> UpdateAsync(string id, UpdateRecordVM model)
@@ -54,7 +54,7 @@ public class RecordsService : IRecordsService
         await _repository.SaveAsync();
 
         var data = _mapper.Map<RowRecordVM>(record);
-        return new AppResponse<RowRecordVM>(200, null, data);
+        return new AppResponse<RowRecordVM>(HttpStatusCode.OK, null, data);
     }
 
     public async Task<AppResponse> DeleteAsync(string id)
@@ -64,7 +64,7 @@ public class RecordsService : IRecordsService
         _repository.Delete(record);
         await _repository.SaveAsync();
 
-        return AppResponse.WithStatusCode(HttpStatusCode.NoContent);
+        return new AppResponse(HttpStatusCode.NoContent, null);
     }
 
     private async Task<RowRecord> GetRecordAsync(Guid id)
