@@ -1,8 +1,16 @@
+using CSVReader.Domain.Interfaces;
+using CSVReader.Domain.Models;
+
 namespace CSVReader.Domain.Exceptions;
 
-public class UnauthorizedException : Exception
+public class UnauthorizedException : Exception, IAppException
 {
-    public UnauthorizedException(string message) : base(message)
+    public UnauthorizedException(IEnumerable<string> errors)
     {
+        Errors = errors;
     }
+
+    public int StatusCode => 401;
+    
+    public IEnumerable<string> Errors { get; private set; }
 }

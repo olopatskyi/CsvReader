@@ -1,7 +1,9 @@
 using System.Reflection;
+using System.Text.Json;
 using AutoMapper;
 using CSVReader.Application.Extensions;
 using CSVReader.Application.Shared;
+using CSVReader.Domain.Models;
 using CSVReader.Domain.Settings;
 using CSVReader.Infrastructure.Extensions;
 using CSVReader.WebApi.Extensions;
@@ -22,17 +24,9 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers()
-            .ConfigureApiBehaviorOptions(c =>
-        {
-            c.InvalidModelStateResponseFactory = (context) =>
-            {
-                var mapper = context.HttpContext.RequestServices.GetRequiredService<IMapper>();
-
-                return new BadRequestObjectResult(mapper.Map<AppResponse>(context.ModelState));
-            };
-        });
-
+        services.AddControllers();
+        services.ConfigureBadRequestResponse();
+        
         services
             .AddSwagger()
             .AddSettings(Configuration)
@@ -55,8 +49,10 @@ public class Startup
     {
         if (env.IsDevelopment())
         {
-            app.UseDeveloperExceptionPage();
+           
         }
+
+        app.UseMiddleware<ExceptionHandlerMiddleware>();
 
         app.UseSwagger();
         app.UseSwaggerUI(options => { options.SwaggerEndpoint("/swagger/v1/swagger.json", "CSV File Editor"); });
@@ -66,7 +62,6 @@ public class Startup
         app.UseAuthentication();
         app.UseAuthorization();
         
-        app.UseMiddleware<ExceptionHandlerMiddleware>();
         
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }

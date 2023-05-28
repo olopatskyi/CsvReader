@@ -31,6 +31,7 @@ public static class DependencyInjection
     public static IServiceCollection AddServices(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddTransient<ICsvFileService, CsvFileService>();
+        serviceCollection.AddTransient<IRecordsService, RecordsService>();
         
         return serviceCollection;
     }

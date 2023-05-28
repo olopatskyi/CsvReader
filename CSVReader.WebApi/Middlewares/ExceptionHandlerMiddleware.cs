@@ -1,6 +1,10 @@
 using System.Net;
 using System.Text.Json;
+using CSVReader.Application.Extensions;
+using CSVReader.Application.Shared;
 using CSVReader.Domain.Exceptions;
+using CSVReader.Domain.Interfaces;
+using CSVReader.Domain.Models;
 
 public class ExceptionHandlerMiddleware
 {
@@ -16,49 +20,49 @@ public class ExceptionHandlerMiddleware
     public async Task InvokeAsync(HttpContext context)
     {
         context.Response.ContentType = "application/json";
+        AppResponse response = null;
+
         try
         {
             await _next(context);
         }
-        catch (KeyNotFoundException ex)
+        catch (NotFoundException ex)
         {
-            context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+            context.Response.StatusCode = ex.StatusCode;
+            response = new AppResponse().CreateWithOneMessage(ex);
         }
         catch (ForbiddenException ex)
         {
-            context.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+            context.Response.StatusCode = ex.StatusCode;
+            response = new AppResponse().CreateWithOneMessage(ex);
         }
         catch (UnauthorizedException ex)
         {
-            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+            context.Response.StatusCode = ex.StatusCode;
+            response = new AppResponse().CreateWithOneMessage(ex);
+        }
+        catch (ValidationException ex)
+        {
+            context.Response.StatusCode = ex.StatusCode;
+            response = new AppResponse().CreateWithOneMessage(ex);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An unhandled exception occurred.");
+            response = new AppResponse().CreateWithOneMessage(ToUnhandledException(ex));
+        }
 
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+        if (response != null)
+        {
+            await context.Response.WriteAsJsonAsync(response);
         }
     }
 
-    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private UnhandledException ToUnhandledException(Exception ex)
     {
-        context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-        // Create a response object with the error details
-        var response = new
+        return new UnhandledException(new[]
         {
-            error = new
-            {
-                message = "An error occurred.",
-                details = exception.Message
-            }
-        };
-
-        // Serialize the response object to JSON
-        var json = JsonSerializer.Serialize(response);
-
-        // Write the JSON response to the HTTP response
-        await context.Response.WriteAsync(json);
+            ex.Message
+        });
     }
 }

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using CSVReader.Domain.Entities;
 using CSVReader.Domain.Interfaces;
 using CSVReader.Domain.Models;
@@ -14,6 +15,11 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEnti
     {
         _databaseContext = databaseContext;
         DbSet = databaseContext.Set<TEntity>();
+    }
+
+    public async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> expression)
+    {
+        return await DbSet.AsNoTracking().FirstOrDefaultAsync(expression);
     }
 
     public async Task CreateAsync(TEntity entity)
@@ -36,9 +42,9 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEnti
         await DbSet.AddRangeAsync(entities);
     }
 
-    public async Task<IEnumerable<TEntity>> GetAsync()
+    public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> expression)
     {
-        return await DbSet.ToListAsync();
+        return await DbSet.Where(expression).AsNoTracking().ToListAsync();
     }
 
     public async Task SaveAsync()

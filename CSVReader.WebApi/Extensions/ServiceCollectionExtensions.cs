@@ -1,10 +1,13 @@
 using System.Reflection;
 using System.Text;
+using AutoMapper;
 using CSVReader.Application.Shared;
+using CSVReader.Domain.Models;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -75,5 +78,20 @@ public static class ServiceCollectionExtensions
         });
         
         return services;
+    }
+
+    public static void ConfigureBadRequestResponse(this IServiceCollection services)
+    {
+        services.Configure<ApiBehaviorOptions>(options =>
+        {
+            options.InvalidModelStateResponseFactory = (context) =>
+            {
+                var mapper = context.HttpContext.RequestServices.GetRequiredService<IMapper>();
+                options.SuppressModelStateInvalidFilter = true;
+
+                return new BadRequestObjectResult(
+                    mapper.Map<AppResponse>(mapper.Map<AppResponse>(mapper.Map<AppResponse>(context.ModelState))));
+            };
+        });
     }
 }

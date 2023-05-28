@@ -1,3 +1,4 @@
+using CSVReader.Application.Interfaces;
 using CSVReader.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +8,18 @@ namespace CSVReader.WebApi.Controllers;
 [ApiController]
 public class CsvFilesController : ControllerBase
 {
-    [HttpPost]
-    public async Task<IActionResult> CreateAsync()
+    private readonly ICsvFileService _csvFileService;
+
+    public CsvFilesController(ICsvFileService csvFileService)
     {
-        throw new KeyNotFoundException();
-        return Ok();
+        _csvFileService = csvFileService;
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateAsync([FromForm] CreateFileVM model)
+    {
+        var result = await _csvFileService.CreateAsync(model);
+        
+        return Created(string.Empty, result);
     }
 }

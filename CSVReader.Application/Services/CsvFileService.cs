@@ -3,9 +3,10 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using CSVReader.Application.Interfaces;
 using CSVReader.Application.Models;
-using CSVReader.Application.Shared;
 using CSVReader.Domain.Entities;
 using CSVReader.Domain.Interfaces;
+using CSVReader.Domain.Models;
+using ValidationException = CSVReader.Domain.Exceptions.ValidationException;
 
 namespace CSVReader.Application.Services;
 
@@ -43,24 +44,59 @@ public class CsvFileService : ICsvFileService
         var records = new List<RowRecord>();
         var csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
-            HasHeaderRecord = model.HasHeaderRecord,  // Set to true if the CSV file has a header row
-            Delimiter = model.Delimiter,         // Set the delimiter character used in the CSV file
+            HasHeaderRecord = model.HasHeaderRecord,
+            Delimiter = model.Delimiter
         };
 
         using var reader = new StreamReader(new BufferedStream(model.File.OpenReadStream()));
-        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-        var record = new RowRecord
+        using var csv = new CsvReader(reader, csvConfiguration);
+
+// Read the header record if it exists
+        if (model.HasHeaderRecord)
         {
-            Name = csv.GetField<string>(0) ?? string.Empty,
-            DateOfBirth = csv.GetField<DateTime>(1),
-            Married = csv.GetField<bool>(2),
-            Salary = csv.GetField<decimal>(3)
-        };
+            csv.Read();
+        }
+
         while (csv.Read())
         {
+            var record = new RowRecord();
+
+            // Validate and assign the 'Name' field
+            var name = csv.GetField<string>(0);
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ValidationException(new[] { "Invalid name format" });
+
+            }
+            record.Name = name;
+
+            // Validate and assign the 'DateOfBirth' field
+            var dateOfBirthString = csv.GetField<string>(1);
+            if (!DateTime.TryParse(dateOfBirthString, out DateTime dateOfBirth))
+            {
+                throw new ValidationException(new[] { "Invalid date format" });
+            }
+            record.DateOfBirth = dateOfBirth;
+
+            // Validate and assign the 'Married' field
+            var marriedString = csv.GetField<string>(2);
+            if (!bool.TryParse(marriedString, out bool married))
+            {
+                throw new ValidationException(new[] { "Invalid married format" });
+            }
+            record.Married = married;
+
+            // Validate and assign the 'Salary' field
+            var salaryString = csv.GetField<string>(3);
+            if (!decimal.TryParse(salaryString, out decimal salary))
+            {
+                throw new ValidationException(new[] { "Invalid salary format" });
+            }
+            record.Salary = salary;
+
             records.Add(record);
         }
-        
+
         return records;
     }
 }
