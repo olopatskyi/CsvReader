@@ -1,3 +1,4 @@
+using System.Globalization;
 using CSVReader.Domain.Entities;
 using CSVReader.Domain.Interfaces;
 using CSVReader.Domain.Models;
@@ -14,7 +15,7 @@ public class RowRecordFilter : IFilter<RowRecord>
         return sorted;
     }
     
-    private IQueryable<RowRecord> SetFilter(IQueryable<RowRecord> query, string property, string value)
+    private static IQueryable<RowRecord> SetFilter(IQueryable<RowRecord> query, string? property, string? value)
     {
         if (string.IsNullOrEmpty(property))
             return query;
@@ -24,15 +25,15 @@ public class RowRecordFilter : IFilter<RowRecord>
 
         return property switch
         {
-            "name" => query.Where(x => x.Name.Contains(value)),
-            "salary" => query.Where(x => x.Salary.ToString().Contains(value)),
-            "birthday" => query.Where(x => x.DateOfBirth.Equals(DateTime.Parse(value))),
-            "married" => query.Where(x => x.Married == bool.Parse(value)),
+            "name" => query.Where(x => x.Name.Contains(value!)),
+            "salary" => query.Where(x => x.Salary.ToString(CultureInfo.InvariantCulture).Contains(value!)),
+            "birthday" => query.Where(x => x.DateOfBirth.Equals(DateTime.Parse(value!))),
+            "married" => query.Where(x => x.Married == bool.Parse(value!)),
             _ => query.Where(x => true)
         };
     }
 
-    private IQueryable<RowRecord> SetSort(IQueryable<RowRecord> query, string sortBy, OrderBy orderBy)
+    private static IQueryable<RowRecord> SetSort(IQueryable<RowRecord> query, string? sortBy, OrderBy orderBy)
     {
         return sortBy switch
         {

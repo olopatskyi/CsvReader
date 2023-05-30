@@ -35,21 +35,26 @@ public class CsvFilesController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAsync(string id)
+    public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] UpdateFileVM model)
     {
-        return Ok();
+        var result = await _csvFileService.UpdateAsync(id, model);
+        
+        return Ok(result);
     }
     
     [HttpPatch("{id}")]
     public async Task<IActionResult> PatchAsync(Guid id, [FromBody] JsonPatchDocument<CsvFile> patchDocument)
     {
         var result = await _csvFileService.PatchAsync(id, patchDocument);
-        return Ok();
+        
+        return Ok(result);
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteAsync(string id)
+    public async Task<IActionResult> DeleteAsync(Guid id)
     {
-        return Ok();
+        var result = await _csvFileService.DeleteAsync(id);
+        
+        return Ok(result); // Should be NoContent, but we should output body
     }
 }

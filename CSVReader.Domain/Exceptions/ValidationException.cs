@@ -6,6 +6,7 @@ public class ValidationException : Exception, IAppException
 {
     public ValidationException(IEnumerable<string> errors)
     {
+        Errors = errors;
     }
 
     public int StatusCode => 400;

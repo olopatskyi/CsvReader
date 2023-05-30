@@ -25,7 +25,9 @@ public class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
                 EmailConfirmed = true,
                 PhoneNumber = "1234567890",
                 PhoneNumberConfirmed = true,
+#pragma warning disable CS8625
                 PasswordHash = passwordHasher.HashPassword(null, "admin"),
+#pragma warning restore CS8625
                 SecurityStamp = "YourSecurityStamp",
                 TwoFactorEnabled = false,
                 LockoutEnabled = true,

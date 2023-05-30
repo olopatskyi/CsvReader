@@ -20,7 +20,7 @@ public class ExceptionHandlerMiddleware
     public async Task InvokeAsync(HttpContext context)
     {
         context.Response.ContentType = "application/json";
-        AppResponse response = null;
+        AppResponse? response = null;
 
         try
         {
@@ -58,7 +58,7 @@ public class ExceptionHandlerMiddleware
         }
     }
 
-    private UnhandledException ToUnhandledException(Exception ex)
+    private static UnhandledException ToUnhandledException(Exception ex)
     {
         return new UnhandledException(new[]
         {
