@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Net;
+using AutoMapper;
 using CsvHelper;
 using CsvHelper.Configuration;
 using CSVReader.Application.Interfaces;
@@ -17,10 +18,11 @@ namespace CSVReader.Application.Services;
 public class CsvFileService : ICsvFileService
 {
     private readonly IRepository<CsvFile> _repository;
-
-    public CsvFileService(IRepository<CsvFile> repository)
+    private readonly IMapper _mapper;
+    public CsvFileService(IRepository<CsvFile> repository, IMapper mapper)
     {
         _repository = repository;
+        _mapper = mapper;
     }
 
     public async Task<AppResponse> CreateAsync(CreateFileVM model)
@@ -51,9 +53,11 @@ public class CsvFileService : ICsvFileService
 
         return new AppResponse<CsvFile>(HttpStatusCode.OK, null, file);
     }
-
-    public Task<AppResponse<RowRecordVM>> UpdateAsync(Guid id)
+    
+    public async Task<AppResponse<RowRecordVM>> UpdateAsync(Guid id, UpdateFileVM model)
     {
+        var file = await GetFileAsync(id);
+        
         throw new NotImplementedException();
     }
 

@@ -20,16 +20,16 @@ public class RecordsService : IRecordsService
         _mapper = mapper;
     }
 
-    public async Task<AppResponse<IEnumerable<RowRecord>>> GetByFileIdAsync(string fileId)
+    public async Task<AppResponse<IEnumerable<RowRecord>>> GetByFileIdAsync(Guid fileId)
     {
-        var records = await _repository.GetAsync(x => x.CsvFileId == Guid.Parse(fileId));
+        var records = await _repository.GetAsync(x => x.CsvFileId == fileId);
 
         return new AppResponse<IEnumerable<RowRecord>>(HttpStatusCode.OK, null, records);
     }
 
-    public async Task<AppResponse<RowRecordVM>> GetByIdAsync(string id)
+    public async Task<AppResponse<RowRecordVM>> GetByIdAsync(Guid id)
     {
-        var record = await GetRecordAsync(Guid.Parse(id));
+        var record = await GetRecordAsync(id);
 
         var data = _mapper.Map<RowRecordVM>(record);
         return new AppResponse<RowRecordVM>(HttpStatusCode.OK, null, data);
@@ -45,9 +45,9 @@ public class RecordsService : IRecordsService
         return new AppResponse(HttpStatusCode.Created, null);
     }
 
-    public async Task<AppResponse<RowRecordVM>> UpdateAsync(string id, UpdateRecordVM model)
+    public async Task<AppResponse<RowRecordVM>> UpdateAsync(Guid id, UpdateRecordVM model)
     {
-        var record = await GetRecordAsync(Guid.Parse(id));
+        var record = await GetRecordAsync(id);
         _mapper.Map(model, record);
 
         _repository.Update(record);
@@ -57,9 +57,9 @@ public class RecordsService : IRecordsService
         return new AppResponse<RowRecordVM>(HttpStatusCode.OK, null, data);
     }
 
-    public async Task<AppResponse> DeleteAsync(string id)
+    public async Task<AppResponse> DeleteAsync(Guid id)
     {
-        var record = await GetRecordAsync(Guid.Parse(id));
+        var record = await GetRecordAsync(id);
 
         _repository.Delete(record);
         await _repository.SaveAsync();

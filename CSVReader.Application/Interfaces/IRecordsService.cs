@@ -7,13 +7,13 @@ namespace CSVReader.Application.Interfaces;
 
 public interface IRecordsService
 {
-    Task<AppResponse<IEnumerable<RowRecord>>> GetByFileIdAsync(string fileId);
+    Task<AppResponse<IEnumerable<RowRecord>>> GetByFileIdAsync(Guid fileId);
     
-    Task<AppResponse<RowRecordVM>> GetByIdAsync(string id);
+    Task<AppResponse<RowRecordVM>> GetByIdAsync(Guid id);
 
     Task<AppResponse> CreateAsync(CreateRecordVM model);
 
-    Task<AppResponse<RowRecordVM>> UpdateAsync(string id, UpdateRecordVM model);
+    Task<AppResponse<RowRecordVM>> UpdateAsync(Guid id, UpdateRecordVM model);
 
-    Task<AppResponse> DeleteAsync(string id);
+    Task<AppResponse> DeleteAsync(Guid id);
 }

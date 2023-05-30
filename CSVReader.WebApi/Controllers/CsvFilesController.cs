@@ -1,5 +1,6 @@
 using CSVReader.Application.Interfaces;
 using CSVReader.Application.Models;
+using CSVReader.Application.Models.CsvFile;
 using CSVReader.Domain.Entities;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ public class CsvFilesController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetByIdAsync(string id)
+    public async Task<IActionResult> GetByIdAsync(Guid id)
     {
         var result = await _csvFileService.GetByIdAsync(id);
 
@@ -40,7 +41,7 @@ public class CsvFilesController : ControllerBase
     }
     
     [HttpPatch("{id}")]
-    public async Task<IActionResult> PatchAsync(string id, [FromBody] JsonPatchDocument<CsvFile> patchDocument)
+    public async Task<IActionResult> PatchAsync(Guid id, [FromBody] JsonPatchDocument<CsvFile> patchDocument)
     {
         var result = await _csvFileService.PatchAsync(id, patchDocument);
         return Ok();

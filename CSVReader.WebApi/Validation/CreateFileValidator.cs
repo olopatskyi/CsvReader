@@ -1,4 +1,4 @@
-using CSVReader.Application.Models;
+using CSVReader.Application.Models.CsvFile;
 using FluentValidation;
 
 namespace CSVReader.WebApi.Validation;
@@ -30,6 +30,6 @@ public class CreateFileValidator : AbstractValidator<CreateFileVM>
         var fileExtension = Path.GetExtension(file.FileName);
 
         // Check if the file extension is ".csv"
-        return string.Equals(fileExtension, ".csv", System.StringComparison.OrdinalIgnoreCase);
+        return string.Equals(fileExtension, ".csv", StringComparison.OrdinalIgnoreCase);
     }
 }

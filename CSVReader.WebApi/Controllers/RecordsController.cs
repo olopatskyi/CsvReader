@@ -16,7 +16,7 @@ public class RecordsController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetRecords(string fileId)
+    public async Task<IActionResult> GetRecords(Guid fileId)
     {
         var result = await _recordsService.GetByFileIdAsync(fileId);
 
@@ -24,7 +24,7 @@ public class RecordsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetRecordAsync(string id)
+    public async Task<IActionResult> GetRecordAsync(Guid id)
     {
         var result = await _recordsService.GetByIdAsync(id);
 
@@ -40,7 +40,7 @@ public class RecordsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateAsync(string id, [FromBody] UpdateRecordVM model)
+    public async Task<IActionResult> UpdateAsync(Guid id, [FromBody] UpdateRecordVM model)
     {
         var result = await _recordsService.UpdateAsync(id, model);
 
@@ -48,7 +48,7 @@ public class RecordsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteAsync(string id)
+    public async Task<IActionResult> DeleteAsync(Guid id)
     {
         var result = await _recordsService.DeleteAsync(id);
         
