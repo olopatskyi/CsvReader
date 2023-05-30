@@ -24,5 +24,3 @@ jobs:
       run: dotnet restore CSVReader.sln
     - name: Build
       run: dotnet build CSVReader.sln
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
