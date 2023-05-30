@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace CSVReader.Application.Models;
+namespace CSVReader.Application.Models.CsvFile;
 
 public class CreateFileVM
 {

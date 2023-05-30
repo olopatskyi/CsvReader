@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CSVReader.WebApi.Controllers;
 
 [ApiController]
-[Route("api/v1/records")]
+[Route("api/v1/files/{fileId}/records")]
 public class RecordsController : ControllerBase
 {
     private readonly IRecordsService _recordsService;
@@ -14,24 +14,22 @@ public class RecordsController : ControllerBase
     {
         _recordsService = recordsService;
     }
-
-    [HttpGet("api/v1/files/{id}")]
-    public async Task<IActionResult> GetByFileIdAsync(string fileId)
-    {
-        var records = await _recordsService.GetByFileIdAsync(fileId);
-        
-        return Ok(records);
-    }
-
-    [HttpGet("{fileId}")]
+    
+    [HttpGet]
     public async Task<IActionResult> GetRecords(string fileId)
     {
         var result = await _recordsService.GetByFileIdAsync(fileId);
 
         return Ok(result);
     }
-    
-    [HttpGet("")]
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetRecordAsync(string id)
+    {
+        var result = await _recordsService.GetByIdAsync(id);
+
+        return Ok(result);
+    }
     
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] CreateRecordVM model)
@@ -39,5 +37,21 @@ public class RecordsController : ControllerBase
         var result = await _recordsService.CreateAsync(model);
 
         return Ok(result);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateAsync(string id, [FromBody] UpdateRecordVM model)
+    {
+        var result = await _recordsService.UpdateAsync(id, model);
+
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteAsync(string id)
+    {
+        var result = await _recordsService.DeleteAsync(id);
+        
+        return Ok(result); //Should be NoContent, but there is already 204 status code in response body
     }
 }
