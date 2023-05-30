@@ -11,6 +11,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEnti
 {
     protected readonly DbSet<TEntity> DbSet;
     private readonly DatabaseContext _databaseContext;
+    
     public Repository(DatabaseContext databaseContext)
     {
         _databaseContext = databaseContext;
